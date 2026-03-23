@@ -36,3 +36,12 @@ test("Narrowing with selectors", async ({ page }) => {
   await passwordInput.fill("newpassword");
   await expect(passwordInput).toHaveValue("newpassword");
 });
+
+test("Chaining filters", async ({ page }) => {
+  await page
+    .locator("nb-card")
+    .filter({ has: page.getByRole("checkbox") })
+    .filter({ hasText: /sign in/i })
+    .getByRole("button")
+    .click();
+});
