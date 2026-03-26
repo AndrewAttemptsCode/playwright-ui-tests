@@ -51,12 +51,12 @@ test.describe("Form layouts page", () => {
 });
 
 test.describe("Modal & Overlays page", () => {
-  test.beforeEach(async({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.getByRole("link", { name: /modal & overlays/i }).click();
     await page.getByRole("link", { name: /toastr/i }).click();
   });
 
-  test("Checkboxes", async({ page }) => {
+  test("Checkboxes", async ({ page }) => {
     // Uncheck first checkbox
     const firstCheckbox = page.getByRole("checkbox", { name: /hide on click/i });
     await firstCheckbox.uncheck({ force: true });
@@ -79,6 +79,46 @@ test.describe("Modal & Overlays page", () => {
       await checkbox.uncheck({ force: true });
       await expect(checkbox).not.toBeChecked();
     };
+  });  
+});
 
+test.describe("Lists and Dropdowns", () => {
+  test("Theme selection", async ({ page }) => {
+    // Narrow to button in header
+    const themeSelect = page.locator("ngx-header nb-select");
+    // Click theme select button
+    await themeSelect.click();
+    // Narrow list role by tag selector
+    const optionList = page.getByRole("list").locator("nb-option");
+    // Expect list to contain correct options
+    await expect(optionList).toHaveText([/light/i, /dark/i, /cosmic/i, /corporate/i]);
+    // Narrow theme to dark mode option
+    const darkMode = optionList.filter({ hasText: /dark/i });
+    // Click dark mode theme
+    await darkMode.click();
+    // Expect theme button to display dark
+    await expect(themeSelect).toHaveText(/dark/i);
+    // Target header element
+    const header = page.locator("nb-layout-header");
+    // Expect updated header background theme color 
+    await expect(header).toHaveCSS("background-color", "rgb(34, 43, 69)");
+
+    // Header bg color themes
+    const colors = {
+      "Light": "rgb(255, 255, 255)",
+      "Dark": "rgb(34, 43, 69)",
+      "Cosmic": "rgb(50, 50, 89)",
+      "Corporate": "rgb(255, 255, 255)"
+    }
+
+    // Loop through each theme in the theme list
+    // Expect header bg to match colors object entries
+    for (const [themeName, bgColor] of Object.entries(colors)) {
+      await themeSelect.click();
+      const option = optionList.filter({ hasText: themeName });
+      await option.click();
+      await expect(header).toHaveCSS("background-color", bgColor);
+    }
   });
-})
+  
+});
