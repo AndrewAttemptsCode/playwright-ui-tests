@@ -198,4 +198,31 @@ test.describe("Web tables", () => {
     // Expect updated changes in Age field
     await expect(tableRow).toContainText("20");
   });
+
+  test("Edit mode via ID column", async ({ page }) => {
+    // Navigate to second table page
+    const paginator = page.locator(".ng2-smart-pagination").getByRole("link", { name: "2" })
+    await paginator.click();
+    // Identify smart table
+    const table = page.getByRole("table");
+    // Identify all table rows
+    const tableRows = table.getByRole("row");
+    // Identify ID column with specified ID
+    const rowById = tableRows.filter({ has: page.locator("td:nth-child(2)", { hasText: "11" }) });
+    // Enable edit mode via ID
+    const editButton = rowById.locator(".nb-edit");
+    await editButton.click();
+    // Locate Email input field
+    const emailInputField = page.locator("input-editor").getByPlaceholder("E-mail");
+    // Update email cell with new email
+    await emailInputField.fill("test@test.com");
+    // Locate confirm edit button
+    const confirmButton = page.locator(".nb-checkmark");
+    // Click confirm changes button
+    await confirmButton.click();
+    // Locate email data of updated row
+    const emailData = rowById.locator("td:nth-child(6)");
+    // Expect email to be updated to latest value
+    await expect(emailData).toHaveText("test@test.com");
+  });
 });
