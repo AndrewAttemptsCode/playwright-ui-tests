@@ -195,8 +195,10 @@ test.describe("Web tables", () => {
     const confirmButton = page.locator(".nb-checkmark");
     // Click confirm changes button
     await confirmButton.click();
+    // Locate age data of updated row
+    const ageData = tableRow.locator("td:nth-child(7)");
     // Expect updated changes in Age field
-    await expect(tableRow).toContainText("20");
+    await expect(ageData).toHaveText("20");
   });
 
   test("Edit mode via ID column", async ({ page }) => {
