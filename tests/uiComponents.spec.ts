@@ -171,3 +171,31 @@ test.describe("Dialog boxes", () => {
     await expect(tableRow).not.toBeVisible();
   });
 });
+
+test.describe("Web tables", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByRole("link", { name: /tables & data/i }).click();
+    await page.getByRole("link", { name: /smart table/i }).click();
+  });
+
+  test("Edit table row data", async ({ page }) => {
+    // Identify smart table
+    const table = page.getByRole("table");
+    // Identify first table row via username
+    const tableRow = table.getByRole("row").filter({ hasText: /@twitter/i });
+    // Identify edit item button
+    const editButton = tableRow.locator(".nb-edit");
+    // Enable edit mode for table row data
+    await editButton.click();
+    // Locate Age input field
+    const ageInputField = page.locator("input-editor").getByPlaceholder("Age");
+    // Update Age cell with age 20
+    await ageInputField.fill("20");
+    // Locate confirm edit button
+    const confirmButton = page.locator(".nb-checkmark");
+    // Click confirm changes button
+    await confirmButton.click();
+    // Expect updated changes in Age field
+    await expect(tableRow).toContainText("20");
+  });
+});
