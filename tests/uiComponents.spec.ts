@@ -250,3 +250,22 @@ test.describe("Web tables", () => {
 
   });
 });
+
+test.describe("Date picker", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.getByRole("link", { name: /forms/i }).click();
+    await page.getByRole("link", { name: /datepicker/i }).click();
+  });
+
+  test("Pick a date from calendar", async ({ page }) => {
+    const card = page.locator("nb-card").filter({ hasText: /common datepicker/i });
+    const dateInput = card.getByPlaceholder("Form Picker");
+    await dateInput.click();
+    const calendar = page.locator("nb-calendar");
+    await expect(calendar).toBeVisible();
+    const currentMonth = calendar.locator(".day-cell.ng-star-inserted:not(.bounding-month)");
+    const firstDayOfMonth = currentMonth.getByText("1", { exact: true });
+    await firstDayOfMonth.click();
+    expect(dateInput).not.toBe("");
+  });
+});
