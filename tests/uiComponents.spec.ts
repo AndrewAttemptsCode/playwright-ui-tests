@@ -286,4 +286,46 @@ test.describe("Date picker", () => {
     await secondDayOfMonth.click();
     await expect(dateInput).toHaveValue("Jun 2, 2026");
   });
+
+  test("Pick 64 days from today", async ({ page }) => {
+    const card = page.locator("nb-card").filter({ hasText: /common datepicker/i });
+    const dateInput = card.getByPlaceholder("Form Picker");
+    await dateInput.click();
+    const calendar = page.locator("nb-calendar");
+    await expect(calendar).toBeVisible();
+    const currentMonth = calendar.locator(".day-cell:not(.bounding-month)");
+
+    // Get current date plus 64 days
+    let date = new Date();
+    date.setDate(date.getDate() + 64);
+    // Convert calculated current date to string
+    const expectedDate = date.getDate().toString();
+
+    // Create date string to match expected calendar output value
+    const monthShort = date.toLocaleString("en-GB", { month: "short" });
+    const monthLong = date.toLocaleString("en-GB", { month: "long" });
+    const year = date.getFullYear();
+
+    const formattedDate = `${monthShort} ${expectedDate}, ${year}`;
+
+    // Locate current month and year display
+    const viewMode = calendar.locator("nb-calendar-view-mode");
+    let currentMonthYear = await viewMode.textContent();
+
+    // Located current month and year to match output
+    const expectedMonthYear = ` ${monthLong} ${year} `;
+
+    // Loop through each month and year until match
+    // update currentMonthYear with latest text content if no match
+    while (currentMonthYear !== expectedMonthYear) {
+      const nextMonth = calendar.locator(".next-month");
+      await nextMonth.click();
+      currentMonthYear = await viewMode.textContent();
+    };
+
+    // Locate and select 64th date from todays date
+    const datePicker = currentMonth.getByText(expectedDate, { exact: true });
+    await datePicker.click();
+    await expect(dateInput).toHaveValue(formattedDate);
+  });
 });
