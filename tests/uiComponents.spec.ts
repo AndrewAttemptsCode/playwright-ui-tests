@@ -268,4 +268,22 @@ test.describe("Date picker", () => {
     await firstDayOfMonth.click();
     expect(dateInput).not.toBe("");
   });
+
+  test("Pick exact date from calendar", async ({ page }) => {
+    const card = page.locator("nb-card").filter({ hasText: /common datepicker/i });
+    const dateInput = card.getByPlaceholder("Form Picker");
+    await dateInput.click();
+    const calendar = page.locator("nb-calendar");
+    await expect(calendar).toBeVisible();
+    const overviewSelector = calendar.locator("nb-calendar-view-mode").getByRole("button");
+    await overviewSelector.click();
+    const yearSelector = calendar.locator("nb-calendar-year-picker").getByText("2026");
+    await yearSelector.click();
+    const monthSelector = calendar.locator("nb-calendar-month-picker").getByText("Jun");
+    await monthSelector.click();
+    const currentMonth = calendar.locator(".day-cell:not(.bounding-month)");
+    const secondDayOfMonth = currentMonth.getByText("2", { exact: true });
+    await secondDayOfMonth.click();
+    await expect(dateInput).toHaveValue("Jun 2, 2026");
+  });
 });
