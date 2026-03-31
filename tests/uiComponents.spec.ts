@@ -329,3 +329,44 @@ test.describe("Date picker", () => {
     await expect(dateInput).toHaveValue(formattedDate);
   });
 });
+
+test.describe("Sliders", () => {
+  test("Set to maximum temperature", async ({ page }) => {
+    // Hacky, direct DOM manipulation using evaluate.
+    const tempSlider = page.locator('nb-tab[tabtitle="Temperature"] ngx-temperature-dragger circle');
+    await tempSlider.evaluate(element => {
+      element.setAttribute("cx", "232.630");
+      element.setAttribute("cy", "232.630");
+    });
+    await tempSlider.click();
+  });
+
+  test("Set temperature to min and max", async ({ page }) => {
+    // Using element bounding box and mouse movements
+    const tempContainer = page.locator('nb-tab[tabtitle="Temperature"] ngx-temperature-dragger');
+    await tempContainer.scrollIntoViewIfNeeded();
+    
+    const tempBox = await tempContainer.boundingBox();
+    if (!tempBox) throw new Error("Temperature slider not visible");
+
+    const x = tempBox.x + tempBox.width / 2;
+    const y = tempBox.y + tempBox.height / 2;
+
+    // Move slider with mouse to 30C
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + 150, y + 150, { steps: 15 });
+    await page.mouse.up();
+
+    await expect(tempContainer).toContainText("30");
+
+    // Move slider with mouse to 12C
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x - 150, y + 150, { steps: 15 });
+    await page.mouse.up();
+
+    await expect(tempContainer).toContainText("12");
+  });
+
+});
