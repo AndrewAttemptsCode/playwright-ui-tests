@@ -18,7 +18,7 @@ test("'Inline form' login", async ({ page }) => {
   const pm = new PageManager(page);
   await pm.navigateTo().formLayoutsPage();
 
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i < 10; i++) {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const fullName = `${firstName} ${lastName}`;
