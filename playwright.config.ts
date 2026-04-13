@@ -37,6 +37,20 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'dev-chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4201'
+      },
+    },
+    {
+      name: 'staging-chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4202'
+      },
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
