@@ -2,6 +2,12 @@ import { test } from "@playwright/test";
 import PageManager from "../pageObjects/PageManager";
 import { faker } from "@faker-js/faker";
 
+const formEmail = process.env.FORM_EMAIL;
+const formPassword = process.env.FORM_PASSWORD;
+
+if (!formEmail || !formPassword) {
+  throw new Error("Form email/password env var is missing");
+}
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -11,7 +17,7 @@ test("'Using the grid' login", async ({ page }, testInfo) => {
   const pm = new PageManager(page);
   await pm.navigateTo().formLayoutsPage();
 
-  await pm.onFormLayoutsPage().signinGrid("email@email.com", "password123", "Option 1");
+  await pm.onFormLayoutsPage().signinGrid(formEmail, formPassword, "Option 1");
   // Take screenshot of whole app and save to path
   await page.screenshot({ path: testInfo.outputPath("formLogin.png") });
 });
