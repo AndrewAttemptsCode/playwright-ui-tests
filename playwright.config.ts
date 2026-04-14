@@ -37,34 +37,48 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'dev-chrome',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:4201'
-      },
-    },
-    {
-      name: 'staging-chrome',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:4202'
-      },
-    },
-    {
+        {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { browserName: 'chromium' },
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { browserName: 'firefox' },
     },
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { browserName: 'webkit' },
     },
+    // {
+    //   name: 'dev-chrome',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'http://localhost:4201'
+    //   },
+    // },
+    // {
+    //   name: 'staging-chrome',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'http://localhost:4202'
+    //   },
+    // },
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'] },
+    // },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
