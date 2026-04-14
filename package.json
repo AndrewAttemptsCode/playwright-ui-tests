@@ -7,7 +7,8 @@
   "scripts": {
     "testForms-chrome": "npx playwright test formLayouts.spec.ts --project=chromium",
     "testForms-firefox": "npx playwright test formLayouts.spec.ts --project=firefox",
-    "testForms-all": "npm run testForms-chrome && npm run testForms-firefox"
+    "testForms-all": "npm run testForms-chrome && npm run testForms-firefox",
+    "allTestsProd": "npx playwright test --config=playwright-prod.config.ts"
   },
   "repository": {
     "type": "git",
