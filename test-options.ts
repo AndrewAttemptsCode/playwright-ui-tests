@@ -1,16 +1,26 @@
 import { test as base } from "@playwright/test";
 import FormLayoutsPage from "./pageObjects/FormLayoutsPage";
 import SideNav from "./pageObjects/SideNav";
+import PageManager from "./pageObjects/PageManager";
 
 type TestOptions = {
   formLayoutsPage: FormLayoutsPage;
+  pageManager: PageManager;
 };
 
 export const test = base.extend<TestOptions>({
-  formLayoutsPage: async ({ page }, use) => {
+  page: async ({ page }, use) => {
     await page.goto("/");
+    await use(page);
+  },
+
+  formLayoutsPage: async ({ page }, use) => {
     const navigateTo = new SideNav(page);
     await navigateTo.formLayoutsPage();
     await use(new FormLayoutsPage(page));
+  },
+
+  pageManager: async ({ page }, use) => {
+    await use(new PageManager(page));
   },
 });
