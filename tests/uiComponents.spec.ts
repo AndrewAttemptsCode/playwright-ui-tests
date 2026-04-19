@@ -1,13 +1,20 @@
 import { test, expect } from "@playwright/test";
+import PageManager from "../pageObjects/PageManager";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
 test.describe("Form layouts page", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
     await page.getByRole("link", { name: /forms/i }).click();
     await page.getByRole("link", { name: /form layouts/i }).click();
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   });
 
   test("Input fields", async ({ page }) => {
@@ -51,9 +58,15 @@ test.describe("Form layouts page", () => {
 });
 
 test.describe("Modal & Overlays page", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
     await page.getByRole("link", { name: /modal & overlays/i }).click();
     await page.getByRole("link", { name: /toastr/i }).click();
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   });
 
   test("Checkboxes", async ({ page }) => {
@@ -83,7 +96,8 @@ test.describe("Modal & Overlays page", () => {
 });
 
 test.describe("Lists and Dropdowns", () => {
-  test("Theme selection", async ({ page }) => {
+  test("Theme selection", async ({ page, isMobile }) => {
+    test.skip(isMobile, "Not supported on mobile");
     // Narrow to button in header
     const themeSelect = page.locator("ngx-header nb-select");
     // Click theme select button
@@ -123,9 +137,15 @@ test.describe("Lists and Dropdowns", () => {
 });
 
 test.describe("Tooltips", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
     await page.getByRole("link", { name: /modal & overlays/i }).click();
     await page.getByRole("link", { name: /tooltip/i }).click();
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   });
 
   test("Tooltip on button hover", async ({ page }) => {
@@ -147,9 +167,15 @@ test.describe("Tooltips", () => {
 });
 
 test.describe("Dialog boxes", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
     await page.getByRole("link", { name: /tables & data/i }).click();
     await page.getByRole("link", { name: /smart table/i }).click();
+    if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   });
   
   test("Interact with browser dialog box", async ({ page }) => {
@@ -173,9 +199,9 @@ test.describe("Dialog boxes", () => {
 });
 
 test.describe("Web tables", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.getByRole("link", { name: /tables & data/i }).click();
-    await page.getByRole("link", { name: /smart table/i }).click();
+  test.beforeEach(async ({ page, isMobile }) => {
+    const pm = new PageManager(page);
+    await pm.navigateTo().smartTablePage(isMobile);
   });
 
   test("Edit table row data", async ({ page }) => {
@@ -252,9 +278,9 @@ test.describe("Web tables", () => {
 });
 
 test.describe("Date picker", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.getByRole("link", { name: /forms/i }).click();
-    await page.getByRole("link", { name: /datepicker/i }).click();
+  test.beforeEach(async ({ page, isMobile }) => {
+    const pm = new PageManager(page);
+    await pm.navigateTo().datepickerPage(isMobile);
   });
 
   test("Pick a date from calendar", async ({ page }) => {

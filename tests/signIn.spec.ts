@@ -1,9 +1,15 @@
 import { test, expect } from "@playwright/test";
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, isMobile }) => {
   await page.goto("/");
+  if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   await page.getByRole("link", { name: /forms/i }).click();
   await page.getByRole("link", { name: /form layouts/i }).click();
+  if (isMobile) {
+      await page.locator(".sidebar-toggle").click();
+    }
   await expect(page.getByText(/using the grid/i)).toBeVisible();
 });
 
