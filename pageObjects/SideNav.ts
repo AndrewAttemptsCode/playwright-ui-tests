@@ -27,9 +27,18 @@ class SideNav extends BaseHelper {
     this.tooltipHeader = this.page.locator("nb-card-header", { hasText: /tooltip with icon/i });
   }
 
-  async formLayoutsPage() {
+  async formLayoutsPage(isMobile: boolean) {
+    if (isMobile) {
+      await this.page.locator(".sidebar-toggle").click();
+    }
+
     await this.selectNavGroupLink("Forms");
     await this.formLayoutsLink.click();
+
+    if (isMobile) {
+      await this.page.locator(".sidebar-toggle").click();
+    }
+
     await this.waitForLoad();
     await expect(this.formLayoutsHeader).toBeVisible();
   }
