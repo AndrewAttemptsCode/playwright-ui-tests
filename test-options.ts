@@ -14,9 +14,9 @@ export const test = base.extend<TestOptions>({
     await use(page);
   },
 
-  formLayoutsPage: async ({ page }, use) => {
+  formLayoutsPage: async ({ page, isMobile }, use) => {
     const navigateTo = new SideNav(page);
-    await navigateTo.formLayoutsPage();
+    await navigateTo.formLayoutsPage(isMobile);
     await use(new FormLayoutsPage(page));
   },
 

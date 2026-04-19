@@ -23,8 +23,8 @@ test.describe("Fixture tests", () => {
     await formLayoutsPage.signinInline(fullName, userEmail, true);
   });
 
-  test("'Using the grid' login using page manager fixture", async ({ pageManager }) => {
-    await pageManager.navigateTo().formLayoutsPage();
+  test("'Using the grid' login using page manager fixture", async ({ pageManager, isMobile }) => {
+    await pageManager.navigateTo().formLayoutsPage(isMobile);
     await pageManager.onFormLayoutsPage().signinGrid(formEmail, formPassword, "Option 2");
   });
 });

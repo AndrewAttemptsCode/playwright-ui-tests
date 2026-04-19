@@ -13,18 +13,20 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
-test("'Using the grid' login @smoke @regression", async ({ page }, testInfo) => {
+test("'Using the grid' login @smoke @regression", async ({ page, isMobile }, testInfo) => {
   const pm = new PageManager(page);
-  await pm.navigateTo().formLayoutsPage();
+  // Use of isMobile built in fixture (boolean) based off project device type
+  // to trigger navigation pom toggle of mobile nav burger menu button
+  await pm.navigateTo().formLayoutsPage(isMobile);
 
   await pm.onFormLayoutsPage().signinGrid(formEmail, formPassword, "Option 1");
   // Take screenshot of whole app and save to path
   await page.screenshot({ path: testInfo.outputPath("formLogin.png") });
 });
 
-test("'Inline form' login @regression @ui", async ({ page }, testInfo) => {
+test("'Inline form' login @regression @ui", async ({ page, isMobile }, testInfo) => {
   const pm = new PageManager(page);
-  await pm.navigateTo().formLayoutsPage();
+  await pm.navigateTo().formLayoutsPage(isMobile);
 
   for (let i = 0; i < 10; i++) {
     const firstName = faker.person.firstName();
